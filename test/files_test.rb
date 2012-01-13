@@ -41,3 +41,34 @@ assert { dir.split('/').last =~ /^files_test/ }
 
 
 assert { Files.called_from(0) == "files_test" }
+
+
+dir = Files do
+  dir "foo" do
+    file "foo.txt"
+  end
+  dir "bar" do
+    file "bar.txt"
+    dir "baz" do
+      file "baz.txt"
+    end
+    dir "baf" do
+      file "baf.txt"
+    end
+  end
+end
+
+assert { File.read("#{dir}/foo/foo.txt") == "contents of foo.txt" }
+assert { File.read("#{dir}/bar/bar.txt") == "contents of bar.txt" }
+assert { File.read("#{dir}/bar/baz/baz.txt") == "contents of baz.txt" }
+assert { File.read("#{dir}/bar/baf/baf.txt") == "contents of baf.txt" }
+
+
+dir = Files()
+assert { File.exist? dir and File.directory? dir}
+
+dir = Files do
+  dir "a"
+end
+assert { File.exist? "#{dir}/a" and File.directory? "#{dir}/a"}
+
