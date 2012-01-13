@@ -24,6 +24,7 @@ see `test/files_test.rb` for more examples
 
 * the directory will be removed at exit
   * unless you pass `:remove => false`
+* the directory name is based on the name of the source file you called Files from
 
 ## TODO
 

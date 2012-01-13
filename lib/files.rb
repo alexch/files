@@ -2,12 +2,21 @@ require "files/version"
 
 
 module Files
-  def self.create options = {:remove => true}, &block
+  
+  def self.default_options level = 2
+    {:remove => true, :name => called_from(level)}
+  end
+  
+  def self.called_from level = 1
+    File.basename caller[level].split(':').first, ".rb"
+  end
+  
+  def self.create options = default_options, &block
     require 'tmpdir'
     require 'fileutils'
 
-    called_from = File.basename caller.first.split(':').first, ".rb"
-    path = File.join(Dir::tmpdir, "#{called_from}_#{Time.now.to_i}_#{rand(1000)}")
+    name = options[:name]
+    path = File.join(Dir::tmpdir, "#{name}_#{Time.now.to_i}_#{rand(1000)}")
 
     files = Files.new path, block, options
 
@@ -57,6 +66,6 @@ module Files
   end
 end
 
-def Files *args, &block
-  Files.create *args, &block
+def Files options = Files.default_options, &block
+  Files.create options, &block
 end

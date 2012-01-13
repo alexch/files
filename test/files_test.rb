@@ -18,6 +18,8 @@ dir = Files.create do       # creates a temporary directory inside Dir.tmpdir
   end
 end
 
+assert { dir.split('/').last =~ /^files_test/ }
+
 assert { File.read("#{dir}/hello.txt") == "contents of hello.txt" }
 assert { File.read("#{dir}/web/snippet.html") == "<h1>File under F for fantastic!</h1>" }
 assert { 
@@ -35,3 +37,7 @@ dir = Files do
 end
 assert { File.read("#{dir}/hello.txt") == "contents of hello.txt" }
 assert { File.read("#{dir}/web/hello.html") == "contents of hello.html" }
+assert { dir.split('/').last =~ /^files_test/ }
+
+
+assert { Files.called_from(0) == "files_test" }
