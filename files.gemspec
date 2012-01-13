@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Alex Chaffee"]
   s.email       = ["alex@stinky.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{a simple DSL for creating files and directories}
+  s.description = %q{Sometimes you want to create a whole bunch of files at once, like when you're testing a tool that processes a whole bunch of files. The Files gem lets you cleanly specify those files and their contents inside your test code, instead of making you create a fixture directory and check it in to your repo. It puts them in a temporary directory and cleans up when your test is done.}
 
   s.rubyforge_project = "files"
 
