@@ -56,3 +56,7 @@ module Files
     
   end
 end
+
+def Files *args, &block
+  Files.create *args, &block
+end

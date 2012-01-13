@@ -28,3 +28,10 @@ assert {
   File.read("#{dir}/web/img/other.jpg") ==
   File.read("#{here}/data/cheez_doing_it_wrong.jpg")
 }
+
+dir = Files do
+  file "hello.txt"
+  dir("web") { file "hello.html" }
+end
+assert { File.read("#{dir}/hello.txt") == "contents of hello.txt" }
+assert { File.read("#{dir}/web/hello.html") == "contents of hello.html" }

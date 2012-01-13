@@ -6,7 +6,7 @@
 
     require "files"
 
-    files = Files.create do     # creates a temporary directory inside Dir.tmpdir
+    files = Files do     # creates a temporary directory inside Dir.tmpdir
       file "hello.txt"          # creates file "hello.txt" containing "contents of hello.txt"
       dir "web" do              # creates directory "web"
         file "snippet.html",    # creates file "web/snippet.html"...
@@ -18,10 +18,12 @@
       end
     end                         # returns a string with the path to the directory
 
+see `test/files_test.rb` for more examples
+
 ## Details
 
 * the directory will be removed at exit
-  * unless you pass `:remove => false` to `Files.new`
+  * unless you pass `:remove => false`
 
 ## TODO
 
@@ -33,3 +35,4 @@
 * symlinks (?)
 * specify file mode
 * copy an entire data dir
+* play nice with FakeFS (possibly with a :fake option)
