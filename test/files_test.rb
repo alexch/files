@@ -85,3 +85,13 @@ end
 assert { stuff == "#{dir}/stuff" }
 assert { hello == "#{dir}/stuff/hello.txt" }
 
+dir_inside_do_block = nil
+dir = Files do
+  dir_inside_do_block = Dir.pwd
+  dir "xyzzy" do
+    assert("sets the current directory inside the dir block") { File.basename(Dir.pwd) == "xyzzy" }
+  end
+end
+assert("sets the current directory inside the Files block") { File.basename(dir_inside_do_block) == File.basename(dir) }
+# note that we can't just compare the full paths because some OS's hard link their temp dir to different base paths
+

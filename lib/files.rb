@@ -34,14 +34,18 @@ module Files
       Dir.mkdir(path)
       at_exit {FileUtils.rm_rf(path) if File.exists?(path)} if options[:remove]
 
-      instance_eval &block if block
+      Dir.chdir(path) do
+        instance_eval &block if block
+      end
     end
 
     def dir name, &block
       path = "#{current}/#{name}"
       Dir.mkdir path
       @dirs << name
-      instance_eval &block if block
+      Dir.chdir(path) do
+        instance_eval &block if block
+      end
       @dirs.pop
       path
     end
