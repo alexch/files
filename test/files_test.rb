@@ -72,3 +72,16 @@ dir = Files do
 end
 assert { File.exist? "#{dir}/a" and File.directory? "#{dir}/a"}
 
+
+# the file and dir methods return the path, suitable for saving into a predeclared local var
+stuff = nil
+hello = nil
+dir = Files do
+  stuff = dir "stuff" do
+    hello = file "hello.txt"
+  end
+end
+
+assert { stuff == "#{dir}/stuff" }
+assert { hello == "#{dir}/stuff/hello.txt" }
+

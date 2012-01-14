@@ -38,24 +38,28 @@ module Files
     end
 
     def dir name, &block
-      Dir.mkdir "#{current}/#{name}"
+      path = "#{current}/#{name}"
+      Dir.mkdir path
       @dirs << name
       instance_eval &block if block
       @dirs.pop
+      path
     end
     
     def file name, contents = "contents of #{name}"
       if name.is_a? File
         FileUtils.cp name.path, current
+        # todo: return path
       else
         path = "#{current}/#{name}"
         if contents.is_a? File
           FileUtils.cp contents.path, path
         else
-          File.open(path, "w") do |f|
+          file_path = File.open(path, "w") do |f|
             f.write contents
           end
         end
+        path
       end
     end
     
