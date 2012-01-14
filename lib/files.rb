@@ -29,14 +29,9 @@ module Files
     
     def initialize path, block, options
       @root = path
-      @dirs = [path]
-
-      Dir.mkdir(path)
+      @dirs = []
+      dir path, &block
       at_exit {FileUtils.rm_rf(path) if File.exists?(path)} if options[:remove]
-
-      Dir.chdir(path) do
-        instance_eval &block if block
-      end
     end
 
     def dir name, &block
