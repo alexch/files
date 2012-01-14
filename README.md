@@ -1,6 +1,6 @@
 # Files
 
-*a simple DSL for creating files and directories*
+*a simple DSL for creating temporary files and directories*
 
 ## Usage
 
@@ -28,12 +28,12 @@ see `test/files_test.rb` for more examples
 
 ## TODO
 
-* :path option -- specifying the location of the temporary dir (default: Dir.tmpdir)
+* :path option -- specifying the parent of the temporary dir (default: Dir.tmpdir)
 * take a hash
 * take a YAML file or string
 * emit a hash
 * emit a YAML file or string
-* symlinks (?)
+* support symlinks (?)
 * specify file mode
 * copy an entire data dir
 * play nice with FakeFS (possibly with a :fake option)
