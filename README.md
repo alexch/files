@@ -34,6 +34,8 @@ see `test/files_test.rb` for more examples
 * emit a hash
 * emit a YAML file or string
 * support symlinks (?)
-* specify file mode
+* specify file write mode
 * copy an entire data dir
 * play nice with FakeFS (possibly with a :fake option)
+* mixin mode -- so you can say "file" or "dir" directly, and it stores the dir in an instance variable and reuses it
+* global/default :remove option
