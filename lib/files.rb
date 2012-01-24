@@ -1,7 +1,8 @@
 require "files/version"
 
-
 module Files
+
+  # class methods
   
   def self.default_options level = 2
     {:remove => true, :name => called_from(level)}
@@ -18,11 +19,23 @@ module Files
     name = options[:name]
     path = File.join(Dir::tmpdir, "#{name}_#{Time.now.to_i}_#{rand(1000)}")
 
-    files = Files.new path, block, options
-
-    files.root
+    Files.new path, block, options
   end
   
+  # mixin methods
+  def files options = ::Files.default_options   # todo: block
+    @files ||= ::Files.create(options)
+  end
+  
+  def file *args, &block
+    files.file *args, &block
+  end
+  
+  def dir *args, &block
+    files.dir *args, &block
+  end
+  
+  # concrete class for creating files and dirs under a temporary directory  
   class Files
     
     attr_reader :root
@@ -31,6 +44,7 @@ module Files
       @root = path
       @dirs = []
       dir path, &block
+      @dirs = [path]
       at_exit {FileUtils.rm_rf(path) if File.exists?(path)} if options[:remove]
     end
 
@@ -71,5 +85,6 @@ module Files
 end
 
 def Files options = Files.default_options, &block
-  Files.create options, &block
+  files = Files.create options, &block
+  files.root
 end
