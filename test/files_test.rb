@@ -5,7 +5,7 @@ here = File.dirname __FILE__
 $LOAD_PATH.unshift File.join(here, '..', 'lib')
 require "files"
 
-## Testing the interface via the Files object
+## Testing the Files object
 
 files = Files.create        # creates a temporary directory inside Dir.tmpdir
 
@@ -38,7 +38,13 @@ assert {
   File.read("#{here}/data/cheez_doing_it_wrong.jpg")
 }
 
-## Testing the interface via the Files method
+files.remove
+assert("remove removes the root dir and all contents") { !File.exist?(dir) }
+assert("after remove, the object is bogus") do
+  rescuing { (files.file "uhoh.txt") }.is_a? Errno::ENOENT
+end
+
+## Testing the Files method (which is the recommended public API)
 
 dir = Files do
   file "hello.txt"
@@ -104,7 +110,7 @@ end
 assert("sets the current directory inside the Files block") { File.basename(dir_inside_do_block) == File.basename(dir) }
 # note that we can't just compare the full paths because some OS's hard link their temp dir to different base paths
 
-## Testing the Mixin interface
+## Testing the Mixin interface (which is the alternate public API)
 class FilesMixinTest
   include Files
   def go

@@ -2,6 +2,8 @@
 
 *a simple DSL for creating temporary files and directories*
 
+Ever want to create a whole bunch of files at once? Like when you're writing tests for a tool that processes files? The Files gem lets you cleanly specify those files and their contents inside your test code, instead of forcing you to create a fixture directory and check it in to your repo. It puts them in a temporary directory and cleans up when your test is done.
+
 ## Usage (mixin mode)
 
 The mixin mode is a fairly clean API, suitable for use in unit tests. After `include Files` you can call `file` or `dir` to make a temporary file or directory; it'll put them into a new temp dir that is removed on process exit. It also saves a reference to this directory inside an instance variable named `@files` so you can't use that name for your own instance variables.
@@ -10,6 +12,7 @@ The mixin mode is a fairly clean API, suitable for use in unit tests. After `inc
     include Files
 
     file "hello.txt"     # creates file "hello.txt" containing "contents of hello.txt"
+
     dir "web" do              # creates directory "web"
       file "snippet.html",    # creates file "web/snippet.html"...
         "<h1>Fix this!</h1>"  # ...containing "<h1>Fix this!</h1>"
@@ -19,7 +22,7 @@ The mixin mode is a fairly clean API, suitable for use in unit tests. After `inc
       end
     end
 
-    files.root           # creates (or returns) a temporary directory
+    files.root           # creates (or returns) the temporary directory
 
 ## Usage (bare function mode)
 
@@ -53,6 +56,7 @@ see `test/files_test.rb` for more usage examples
 
 ## TODO
 
+* test under Windows
 * :path option -- specifying the parent of the temporary dir (default: Dir.tmpdir)
 * take a hash or a YAML file or YAML string to specify the directory layout and contents
 * emit a hash or a YAML file or string to serialize the directory layout and contents for later

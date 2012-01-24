@@ -45,7 +45,7 @@ module Files
       @dirs = []
       dir path, &block
       @dirs = [path]
-      at_exit {FileUtils.rm_rf(path) if File.exists?(path)} if options[:remove]
+      at_exit {remove} if options[:remove]
     end
 
     def dir name, &block
@@ -74,6 +74,10 @@ module Files
         end
         path
       end
+    end
+    
+    def remove
+      FileUtils.rm_rf(@root) if File.exists?(@root)
     end
     
     private
