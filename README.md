@@ -6,7 +6,7 @@ Ever want to create a whole bunch of files at once? Like when you're writing tes
 
 ## Usage (mixin mode)
 
-The mixin mode is a fairly clean API, suitable for use in unit tests. After `include Files` you can call `file` or `dir` to make a temporary file or directory; it'll put them into a new temp dir that is removed on process exit. It also saves a reference to this directory inside an instance variable named `@files` so you can't use that name for your own instance variables.
+The mixin mode is a fairly clean API, suitable for use in unit tests. After `include Files` you can call `file` or `dir` to make a temporary file or directory; it'll put them into a new temp dir that is removed on process exit. It also saves a reference to this directory inside an instance variable named `@files` (so don't use that name for your own instance variables).
 
     require "files"
     include Files
@@ -22,7 +22,7 @@ The mixin mode is a fairly clean API, suitable for use in unit tests. After `inc
       end
     end
 
-    files.root           # creates (or returns) the temporary directory
+    files.root           # returns the path to the temporary directory, creating it if necessary
 
 ## Usage (bare function mode)
 
@@ -52,7 +52,7 @@ see `test/files_test.rb` for more usage examples
 * the directory name is based on the name of the source file you called Files from
 * if the first argument to `file` is a String, then a new file is made
   * the content of the new file is either a short, descriptive message, or whatever you passed as the second argument
-* if the argument to `file` is a Ruby `File` object, then it copies the contents of the named file into the temporary location
+* if the argument to `file` is a Ruby `File` object, then it copies the named file into the new location
 
 ## TODO
 
@@ -70,7 +70,7 @@ see `test/files_test.rb` for more usage examples
 
 Written by Alex Chaffee <http://alexchaffee.com> <mailto:alex@stinky.com> <http://github.com/alexch> [@alexch](http://twitter.com/alexch)
 
-## License
+## License [MIT]
 
 Copyright (C) 2012 Alex Chaffee
 
