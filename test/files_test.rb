@@ -1,5 +1,6 @@
 require "wrong"
 include Wrong
+Wrong.config.verbose
 
 here = File.dirname __FILE__
 $LOAD_PATH.unshift File.join(here, '..', 'lib')
