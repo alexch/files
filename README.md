@@ -1,3 +1,9 @@
+# Why this fork?
+* To implement relative directory creation (instead of always Dir.tmpdir)
+> Implemented by specifying `:path` to `Files.create`, with string path
+* To implement copy of another directory to one created by this module
+> Implemented by specifying `:src` to `dir` method, with string path to src dir
+
 # Files
 
 *a simple DSL for creating temporary files and directories*
@@ -42,6 +48,13 @@ In bare function mode, you call the `Files` method, which doesn't pollute the cu
       end
     end                         # "Files" returns a string with the path to the directory
 
+    src = '/path/to/some/data' # use '/path/to/some/data/.' to only copy contents of data folder, not data folder itself.
+
+    # creates a folder called 'target/$timestamp' relative to pwd
+    dir = Files.create :path => "target" do
+        dir "foo", :src => src do # creates 'target/$timestamp/foo', and copies src into foo
+        end
+    end
 
 see `test/files_test.rb` for more usage examples
 
@@ -57,10 +70,10 @@ see `test/files_test.rb` for more usage examples
 ## TODO
 
 * test under Windows
-* :path option -- specifying the parent of the temporary dir (default: Dir.tmpdir)
+* :path option -- specifying the parent of the temporary dir (default: Dir.tmpdir) -- IMPLEMENTED ON THIS FORK. pass :path to Files.create
 * take a hash or a YAML file or YAML string to specify the directory layout and contents
 * emit a hash or a YAML file or string to serialize the directory layout and contents for later
-* copy an entire data dir
+* copy an entire data dir -- IMPLEMENTED ON THIS FORK. pass :src to dir
 * support symlinks (?)
 * specify file write mode (?)
 * play nice with FakeFS (possibly with a :fake option)
