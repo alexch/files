@@ -1,8 +1,8 @@
 # Why this fork?
 * To implement relative directory creation (instead of always Dir.tmpdir)
-** Implemented by specifying :path to Files.create, with string path
+> Implemented by specifying :path to Files.create, with string path
 * To implement copy of another directory to one created by this module
-** Implemented by specifying :src to dir method, with string path to src dir
+> Implemented by specifying :src to dir method, with string path to src dir
 
 # Files
 
