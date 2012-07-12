@@ -75,6 +75,15 @@ dir = Files do
   end
 end
 
+# test for data directory copy
+src = File.expand_path("#{here}/data/cheez_doing_it_wrong.jpg")
+
+dir = Files.create :path => "target" do
+    dir "foo", :src => src do
+      # TODO write assertions
+    end
+end
+
 assert { File.read("#{dir}/foo/foo.txt") == "contents of foo.txt" }
 assert { File.read("#{dir}/bar/bar.txt") == "contents of bar.txt" }
 assert { File.read("#{dir}/bar/baz/baz.txt") == "contents of baz.txt" }
