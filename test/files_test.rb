@@ -76,7 +76,7 @@ dir = Files do
 end
 
 # test for data directory copy
-src = File.expand_path("#{here}/data/cheez_doing_it_wrong.jpg")
+src = File.expand_path("#{here}/data")
 
 dir = Files.create :path => "target" do
     dir "foo", :src => src do
