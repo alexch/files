@@ -1,3 +1,7 @@
+# Why this fork?
+* To implement relative directory creation (instead of always Dir.tmpdir)
+* To implement copy of another directory to one created by this module
+
 # Files
 
 *a simple DSL for creating temporary files and directories*
