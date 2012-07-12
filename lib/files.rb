@@ -1,6 +1,6 @@
 require "files/version"
 
-module Files
+module Files              
 
   # class methods
   
@@ -17,7 +17,18 @@ module Files
     require 'fileutils'
 
     name = options[:name]
-    path = File.join(Dir::tmpdir, "#{name}_#{Time.now.to_i}_#{rand(1000)}")
+    
+    root = Dir::tmpdir
+    # if the user specified a root directory (instead of default Dir.tmpdir)
+    if options[:path]
+      # then we will create their directory for them (test context-be friendly)
+      root = options[:path]
+      FileUtils::mkdir_p(root)
+      # if they gave relative path, this forces absolute
+      root = File.expand_path(root)
+    end
+
+    path = File.join(root, "#{name}_#{Time.now.to_i}_#{rand(1000)}")
 
     Files.new path, block, options
   end
@@ -48,10 +59,17 @@ module Files
       at_exit {remove} if options[:remove]
     end
 
-    def dir name, &block
+    # only 1 option supported: 'src'. if specified, is copied into 'name'
+    def dir name, options={}, &block
       path = "#{current}/#{name}"
       Dir.mkdir path
       @dirs << name
+
+      if options[:src]
+        # copy over remote dir to this one
+        FileUtils.cp_r(options[:src], path)
+      end
+
       Dir.chdir(path) do
         instance_eval &block if block
       end
