@@ -5,5 +5,5 @@ gemspec
 
 group :development do
   gem "rake"
-  gem "wrong", ">=0.6.1"
+  gem "wrong", ">=0.6.2"
 end
