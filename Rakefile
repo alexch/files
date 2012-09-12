@@ -3,5 +3,5 @@ here = File.dirname __FILE__
 
 task :default => :test
 task :test do
-  require "#{here}/test/files_test"
+  require File.join(here, "test/files_test")
 end

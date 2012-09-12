@@ -1,9 +1,3 @@
-# Why this fork?
-* To implement relative directory creation (instead of always Dir.tmpdir)
-> Implemented by specifying `:path` to `Files.create`, with string path
-* To implement copy of another directory to one created by this module
-> Implemented by specifying `:src` to `dir` method, with string path to src dir
-
 # Files
 
 *a simple DSL for creating temporary files and directories*
@@ -28,7 +22,7 @@ The mixin mode is a fairly clean API, suitable for use in unit tests. After `inc
       end
     end
 
-    files.root           # returns the path to the temporary directory, creating it if necessary
+    @files.root           # returns the path to the temporary directory, creating it if necessary
 
 ## Usage (bare function mode)
 
@@ -52,7 +46,7 @@ In bare function mode, you call the `Files` method, which doesn't pollute the cu
 
     # creates a folder called 'target/$timestamp' relative to pwd
     dir = Files.create :path => "target" do
-        dir "foo", :src => src do # creates 'target/$timestamp/foo', and copies src into foo
+        dir "foo", :src => src do # creates 'target/$timestamp/foo', and copies src into foo [but should it copy the dir or the contents?]
         end
     end
 
@@ -66,14 +60,13 @@ see `test/files_test.rb` for more usage examples
 * if the first argument to `file` is a String, then a new file is made
   * the content of the new file is either a short, descriptive message, or whatever you passed as the second argument
 * if the argument to `file` is a Ruby `File` object, then it copies the named file into the new location
+* To copy another directory to one created by this module, specifying `:src` to `dir` method
+   * [Not sure if this is implemented right... should it copy the *dir* or its *contents*?]
 
 ## TODO
 
-* test under Windows
-* :path option -- specifying the parent of the temporary dir (default: Dir.tmpdir) -- IMPLEMENTED ON THIS FORK. pass :path to Files.create
 * take a hash or a YAML file or YAML string to specify the directory layout and contents
 * emit a hash or a YAML file or string to serialize the directory layout and contents for later
-* copy an entire data dir -- IMPLEMENTED ON THIS FORK. pass :src to dir
 * support symlinks (?)
 * specify file write mode (?)
 * play nice with FakeFS (possibly with a :fake option)
@@ -82,6 +75,10 @@ see `test/files_test.rb` for more usage examples
 ## Credits
 
 Written by Alex Chaffee <http://alexchaffee.com> <mailto:alex@stinky.com> <http://github.com/alexch> [@alexch](http://twitter.com/alexch)
+
+Patches by
+
+* [Seth Call](http://github.com/sethcall)
 
 ## License [MIT]
 

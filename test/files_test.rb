@@ -56,9 +56,7 @@ assert { File.read("#{dir}/hello.txt") == "contents of hello.txt" }
 assert { File.read("#{dir}/web/hello.html") == "contents of hello.html" }
 assert { dir.split('/').last =~ /^files_test/ }
 
-
 assert { Files.called_from(0) == "files_test" }
-
 
 dir = Files do
   dir "foo" do
@@ -75,20 +73,23 @@ dir = Files do
   end
 end
 
-# test for data directory copy
-src = File.expand_path("#{here}/data")
-
-dir = Files.create :path => "target" do
-    dir "foo", :src => src do
-      # TODO write assertions
-    end
-end
-
 assert { File.read("#{dir}/foo/foo.txt") == "contents of foo.txt" }
 assert { File.read("#{dir}/bar/bar.txt") == "contents of bar.txt" }
 assert { File.read("#{dir}/bar/baz/baz.txt") == "contents of baz.txt" }
 assert { File.read("#{dir}/bar/baf/baf.txt") == "contents of baf.txt" }
 
+# test for data directory copy
+src = File.expand_path("#{here}/data")
+
+files = Files.create do
+  dir "foo", :src => src do
+    # note: I'm not sure if this is desired behavior...
+    # shouldn't it put the *contents* of data into foo?
+    assert { File.exist?(File.join(Dir.pwd, 'data/cheez_doing_it_wrong.jpg'))}
+  end
+end
+
+# todo: test :target option
 
 dir = Files()
 assert { File.exist? dir and File.directory? dir}

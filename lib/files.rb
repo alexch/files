@@ -9,7 +9,9 @@ module Files
   end
   
   def self.called_from level = 1
-    File.basename caller[level].split(':').first, ".rb"
+    line = caller[level]
+    line.gsub!(/^.:/, '') # correct for leading Windows C:
+    File.basename line.split(':').first, ".rb"
   end
   
   def self.create options = default_options, &block
@@ -17,8 +19,8 @@ module Files
     require 'fileutils'
 
     name = options[:name]
-    
     root = Dir::tmpdir
+
     # if the user specified a root directory (instead of default Dir.tmpdir)
     if options[:path]
       # then we will create their directory for them (test context-be friendly)
@@ -29,7 +31,7 @@ module Files
     end
 
     path = File.join(root, "#{name}_#{Time.now.to_i}_#{rand(1000)}")
-
+    d{path}
     Files.new path, block, options
   end
   
@@ -54,16 +56,19 @@ module Files
     def initialize path, block, options
       @root = path
       @dirs = []
-      dir path, &block
-      @dirs = [path]
+      dir nil, &block
       at_exit {remove} if options[:remove]
     end
 
     # only 1 option supported: 'src'. if specified, is copied into 'name'
     def dir name, options={}, &block
-      path = "#{current}/#{name}"
+      if name.nil?
+        path = current
+      else
+        path = File.join(current, name)
+      end
       Dir.mkdir path
-      @dirs << name
+      @dirs << name if name
 
       if options[:src]
         # copy over remote dir to this one
@@ -82,7 +87,7 @@ module Files
         FileUtils.cp name.path, current
         # todo: return path
       else
-        path = "#{current}/#{name}"
+        path = File.join(current, name)
         if contents.is_a? File
           FileUtils.cp contents.path, path
         else
@@ -100,7 +105,7 @@ module Files
     
     private
     def current
-      @dirs.join('/')
+      File.join @root, *@dirs
     end
     
   end
