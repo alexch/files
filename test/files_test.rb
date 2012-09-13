@@ -1,8 +1,16 @@
 require "wrong"
 include Wrong
-Wrong.config.verbose
 
-here = File.dirname __FILE__
+def windows?
+  require 'rbconfig'
+  RbConfig::CONFIG["host_os"] =~
+      %r!(msdos|mswin|djgpp|mingw|[Ww]indows)!
+end
+
+Wrong.config.verbose
+Wrong.config.color unless windows?
+
+here = File.expand_path(File.dirname __FILE__)
 $LOAD_PATH.unshift File.join(here, '..', 'lib')
 require "files"
 
@@ -30,11 +38,11 @@ assert { dir =~ /^#{Dir::tmpdir}/}
 
 assert { File.read("#{dir}/hello.txt") == "contents of hello.txt" }
 assert { File.read("#{dir}/web/snippet.html") == "<h1>File under F for fantastic!</h1>" }
-assert { 
+assert {
   File.read("#{dir}/web/img/cheez_doing_it_wrong.jpg") ==
   File.read("#{here}/data/cheez_doing_it_wrong.jpg")
 }
-assert { 
+assert {
   File.read("#{dir}/web/img/other.jpg") ==
   File.read("#{here}/data/cheez_doing_it_wrong.jpg")
 }
@@ -141,15 +149,23 @@ class FilesMixinTest
         assert("the current directory is set inside a nested dir block") { File.read("sub.txt") == "contents of sub.txt" }
       end
     end
-    assert("a file created inside the dir block exists under the root dir") { 
-      File.read("#{@files.root}/bar/bar.txt") == "contents of bar.txt" 
+    assert("a file created inside the dir block exists under the root dir") {
+      File.read("#{@files.root}/bar/bar.txt") == "contents of bar.txt"
     }
-    
+
     subdir = dir "baz"
     assert("the dir method creates the dir") { File.exist?("#{@files.root}/baz")}
     assert("the dir method returns the created dir") { subdir == "#{@files.root}/baz"}
     assert { File.directory?("#{@files.root}/baz")}
-    
+
+    # this behavior is kind of a bug
+    begin
+      @content = "breakfast"
+      dir "stuff" do
+        assert("instance variables are *not* preserved in a dir block") { @content.nil? }
+      end
+    end
+
   end
 end
 FilesMixinTest.new.go
