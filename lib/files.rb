@@ -1,19 +1,19 @@
 require "files/version"
 
-module Files              
+module Files
 
   # class methods
-  
+
   def self.default_options level = 2
     {:remove => true, :name => called_from(level)}
   end
-  
+
   def self.called_from level = 1
     line = caller[level]
     line.gsub!(/^.:/, '') # correct for leading Windows C:
     File.basename line.split(':').first, ".rb"
   end
-  
+
   def self.create options = default_options, &block
     require 'tmpdir'
     require 'fileutils'
@@ -31,28 +31,27 @@ module Files
     end
 
     path = File.join(root, "#{name}_#{Time.now.to_i}_#{rand(1000)}")
-    d{path}
     Files.new path, block, options
   end
-  
+
   # mixin methods
   def files options = ::Files.default_options   # todo: block
     @files ||= ::Files.create(options)
   end
-  
+
   def file *args, &block
     files.file *args, &block
   end
-  
+
   def dir *args, &block
     files.dir *args, &block
   end
-  
-  # concrete class for creating files and dirs under a temporary directory  
+
+  # concrete class for creating files and dirs under a temporary directory
   class Files
-    
+
     attr_reader :root
-    
+
     def initialize path, block, options
       @root = path
       @dirs = []
@@ -81,7 +80,7 @@ module Files
       @dirs.pop
       path
     end
-    
+
     def file name, contents = "contents of #{name}"
       if name.is_a? File
         FileUtils.cp name.path, current
@@ -98,16 +97,16 @@ module Files
         path
       end
     end
-    
+
     def remove
       FileUtils.rm_rf(@root) if File.exists?(@root)
     end
-    
+
     private
     def current
       File.join @root, *@dirs
     end
-    
+
   end
 end
 
