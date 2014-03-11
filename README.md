@@ -62,6 +62,14 @@ see `test/files_test.rb` for more usage examples
 * if the argument to `file` is a Ruby `File` object, then it copies the named file into the new location
 * To copy another directory to one created by this module, specifying `:src` to `dir` method
    * [Not sure if this is implemented right... should it copy the *dir* or its *contents*?]
+* the `dir do` block is executed in the scope of the `Dir` object, so it can't call methods on your object directly.
+  Instead, set a temporary local variable, like this:
+  
+        my_cheese = cheese()
+        dir do
+          file "which_cheese.txt", my_cheese
+        end
+
 
 ## TODO
 
