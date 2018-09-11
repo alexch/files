@@ -64,7 +64,7 @@ see `test/files_test.rb` for more usage examples
    * [Not sure if this is implemented right... should it copy the *dir* or its *contents*?]
 * the `dir do` block is executed in the scope of the `Dir` object, so it can't call methods on your object directly.
   Instead, set a temporary local variable, like this:
-  
+
         my_cheese = cheese()
         dir do
           file "which_cheese.txt", my_cheese

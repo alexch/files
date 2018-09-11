@@ -66,7 +66,7 @@ module Files
       else
         path = File.join(current, name)
       end
-      Dir.mkdir path
+      FileUtils.mkdir_p path
       @dirs << name if name
 
       if options[:src]
