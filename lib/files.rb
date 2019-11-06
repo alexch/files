@@ -99,7 +99,7 @@ module Files
     end
 
     def remove
-      FileUtils.rm_rf(@root) if File.exists?(@root)
+      FileUtils.rm_rf(@root) if File.exist?(@root)
     end
 
     private
