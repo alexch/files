@@ -5,5 +5,6 @@ gemspec
 
 group :development do
   gem "rake"
-  gem "wrong", ">=0.6.2"
+  gem "wrong", path: "../wrong"
+#  gem "wrong", github: "alexch/wrong"
 end
